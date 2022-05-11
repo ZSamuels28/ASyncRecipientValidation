@@ -1,4 +1,4 @@
-async function getRecipientValidation (emaillist) {
+async function getRecipientValidation (GoodEmailList, BadEmailList, BadEmailCount, GoodEmailCount) {
 
     axiosRetry(axios, {
         retries: 3, // number of retries
@@ -14,10 +14,10 @@ async function getRecipientValidation (emaillist) {
 
     var completed = 0
     try {
-        const promises = emaillist.map(async email => {
+        const promises = GoodEmailList.map(async email => {
         const response = await axios({
                 method: 'GET',
-                url: 'https://api.sparkpost.com/api/v1/recipient-validation/single/' + email,
+                url: BASE_URL + '/api/v1/recipient-validation/single/' + email,
                 headers: {
                     'Authorization': API_KEY
                 }
@@ -28,7 +28,7 @@ async function getRecipientValidation (emaillist) {
             })
 
             completed++
-            process.stdout.write("Done with " + completed + " / " + emaillist.length + "\r")
+            process.stdout.write("Done with " + completed + " / " + GoodEmailList.length + "\r")
 
             return {
                 email: email,
@@ -43,14 +43,28 @@ async function getRecipientValidation (emaillist) {
 
         const results = await Promise.all(promises)
         csvWriter.writeRecords(results)
-        console.log("Emails Completed Validation")
-
+        if (BadEmailCount == 0)
+        {
+            console.log("All emails successfully validated.")
+        }
+        else
+        {
+            console.log("Emails Completed Validation with the following results:\nEmails Successfully Validated: " + 
+                GoodEmailCount + "\nEmails with Errors: " + BadEmailCount + "\nError rows found at ErrorLog.csv")
+            errorWriter.writeRecords(BadEmailList)
+        }
     } catch (err) {
         /**
          * If the request is rejected, then the catch method will be executed.
          */
     }
 };
+
+function validateEmail(email) 
+{
+    const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    return re.test(email);
+}
 
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
@@ -63,6 +77,7 @@ const { exit } = require('process');
 dotenv.config()
 const myArgs = process.argv.slice(2);
 const API_KEY = process.env.API_KEY
+const BASE_URL = process.env.BASE_URL
 
 const csvWriter = createCsvWriter({
     path: myArgs[3],
@@ -77,18 +92,37 @@ const csvWriter = createCsvWriter({
     ]
   });
 
-let emaillist = []
+const errorWriter = createCsvWriter({
+    path: 'ErrorLog.csv',
+    header: [
+      {id: 'error_row', title: 'ErrorRow'},
+    ]
+  });
+
+let GoodEmailList = []
+let BadEmailList = []
+let BadEmailCount = 0
+let GoodEmailCount = 0
 
 if (myArgs[0] == '-i' && myArgs[1] != null && myArgs[2] == '-o' && myArgs[3] != null)
 {
     fs.createReadStream(myArgs[1])
     .pipe(csv.parse({headers: false}))
-    .on('data', (row) => {
-        emaillist.push(row)
-    })
-    .on('end', () => {
-        getRecipientValidation(emaillist);
-    });
+        .on('data', (row) => {
+            if (validateEmail(row) == true)
+            {
+                GoodEmailList.push(row)
+                GoodEmailCount++
+            }
+            else
+            {
+                BadEmailList.push({'error_row':row})
+                BadEmailCount++
+            }
+        })
+        .on('end', () => {
+            getRecipientValidation(GoodEmailList,BadEmailList,BadEmailCount,GoodEmailCount);
+        });
 }
 else if (myArgs[0] == '-h')
 {
