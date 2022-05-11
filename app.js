@@ -126,7 +126,12 @@ if (
       }
     })
     .on("end", () => {
-      console.log(GoodEmailCount + " Valid Emails to Validate\n" + BadEmailCount + " Invalid Emails\n...Validating...\n")
+      console.log(
+        GoodEmailCount +
+          " Valid Emails to Validate\n" +
+          BadEmailCount +
+          " Invalid Emails\n...Validating...\n"
+      );
       getRecipientValidation(
         GoodEmailList,
         BadEmailList,
