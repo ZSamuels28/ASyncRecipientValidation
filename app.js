@@ -21,9 +21,9 @@ async function getRecipientValidation(
     const promises = GoodEmailList.map(async (email) => {
       const response = await axios({
         method: "GET",
-        url: BASE_URL + "/api/v1/recipient-validation/single/" + email,
+        url: SPARKPOST_HOST + "/api/v1/recipient-validation/single/" + email,
         headers: {
-          Authorization: API_KEY,
+          Authorization: SPARKPOST_API_KEY,
         },
       }).catch((error) => {
         console.log("Error " + error.response.status + " - " + error);
@@ -82,8 +82,8 @@ const dotenv = require("dotenv");
 const { exit } = require("process");
 dotenv.config();
 const myArgs = process.argv.slice(2);
-const API_KEY = process.env.API_KEY;
-const BASE_URL = process.env.BASE_URL;
+const SPARKPOST_API_KEY = process.env.SPARKPOST_API_KEY;
+const SPARKPOST_HOST = process.env.SPARKPOST_HOST;
 
 const csvWriter = createCsvWriter({
   path: myArgs[3],
