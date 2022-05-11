@@ -58,12 +58,14 @@ const csv = require('fast-csv');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const fs = require('fs');
 
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const { exit } = require('process');
 dotenv.config()
+const myArgs = process.argv.slice(2);
 const API_KEY = process.env.API_KEY
 
 const csvWriter = createCsvWriter({
-    path: 'out.csv',
+    path: myArgs[3],
     header: [
       {id: 'email', title: 'Email'},
       {id: 'result', title: 'Result'},
@@ -77,11 +79,24 @@ const csvWriter = createCsvWriter({
 
 let emaillist = []
 
-fs.createReadStream('valtest.csv')
-.pipe(csv.parse({headers: false}))
-.on('data', (row) => {
-    emaillist.push(row)
-})
-.on('end', () => {
-    getRecipientValidation(emaillist);
-});
+if (myArgs[0] == '-i' && myArgs[1] != null && myArgs[2] == '-o' && myArgs[3] != null)
+{
+    fs.createReadStream(myArgs[1])
+    .pipe(csv.parse({headers: false}))
+    .on('data', (row) => {
+        emaillist.push(row)
+    })
+    .on('end', () => {
+        getRecipientValidation(emaillist);
+    });
+}
+else if (myArgs[0] == '-h')
+{
+    console.log('\x1b[31mThe following is how to use this app.\n\nPlease provide the following arguments:\n\nnode ./app.js -i infile.csv -o outfile.csv')
+    exit(0)  
+}
+else
+{
+    console.log('\x1b[31mPlease provide the following arguments:\n\nnode ./app.js -i infile.csv -o outfile.csv')
+    exit(0)
+}
