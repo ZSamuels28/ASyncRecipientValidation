@@ -7,7 +7,7 @@
 Firstly ensure you have `node`:
 
 Either by downloading directly and installing via: https://nodejs.org/en/download/
-(Recommended) Or by using the following instructions: https://treehouse.github.io/installation-guides/mac/node-mac.html
+Or by using the following instructions: https://treehouse.github.io/installation-guides/mac/node-mac.html
 
 Get the project, and install dependencies.
 
