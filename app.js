@@ -80,6 +80,7 @@ const fs = require("fs");
 
 const dotenv = require("dotenv");
 const { exit } = require("process");
+const { extname } = require("path");
 dotenv.config();
 const myArgs = process.argv.slice(2);
 const SPARKPOST_API_KEY = process.env.SPARKPOST_API_KEY;
@@ -114,31 +115,37 @@ if (
   myArgs[2] == "-o" &&
   myArgs[3] != null
 ) {
-  fs.createReadStream(myArgs[1])
-    .pipe(csv.parse({ headers: false }))
-    .on("data", (row) => {
-      if (validateEmail(row) == true) {
-        GoodEmailList.push(row);
-        GoodEmailCount++;
-      } else {
-        BadEmailList.push({ error_row: row });
-        BadEmailCount++;
-      }
-    })
-    .on("end", () => {
-      console.log(
-        GoodEmailCount +
-          " Valid Emails to Validate\n" +
-          BadEmailCount +
-          " Invalid Emails\n...Validating...\n"
-      );
-      getRecipientValidation(
-        GoodEmailList,
-        BadEmailList,
-        BadEmailCount,
-        GoodEmailCount
-      );
-    });
+  if (extname(myArgs[1]) == ".csv" && extname(myArgs[3]) == ".csv") {
+    fs.createReadStream(myArgs[1])
+      .pipe(csv.parse({ headers: false }))
+      .on("data", (row) => {
+        if (validateEmail(row) == true) {
+          GoodEmailList.push(row);
+          GoodEmailCount++;
+        } else {
+          BadEmailList.push({ error_row: row });
+          BadEmailCount++;
+        }
+      })
+      .on("end", () => {
+        console.log(
+          GoodEmailCount +
+            " Valid Emails to Validate\n" +
+            BadEmailCount +
+            " Invalid Emails\n...Validating...\n"
+        );
+        getRecipientValidation(
+          GoodEmailList,
+          BadEmailList,
+          BadEmailCount,
+          GoodEmailCount
+        );
+      });
+  } else {
+    console.log(
+      "\x1b[31mInvalid input or output file. Please ensure these files are in .csv format"
+    );
+  }
 } else if (myArgs[0] == "-h") {
   console.log(
     "\x1b[31mThe following is how to use this app.\n\nPlease provide the following arguments:\n\nnode ./app.js -i infile.csv -o outfile.csv"

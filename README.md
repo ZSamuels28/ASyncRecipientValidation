@@ -60,7 +60,7 @@ optional arguments:
 
 Use the `-i` and `-o` options to specify input and output files.
 
-An example input file is included in the project and can be seen below:
+An example input file is included in the project (valtest.csv) and can be seen below:
 ```
 devon.herman58@gmail.com
 sherman.goldner@yahoo.com
@@ -89,8 +89,8 @@ When all APIs are completed, the following will be shown if all emails are valid
 If there are invalid emails found, the following will be shown:
 ```
 Email validation completed with the following results:
-Emails Successfully Validated: 7
-Emails with Errors: 1 (See Errorlog.csv for invalid emails)
+Emails Successfully Validated: [CompletedCalls]
+Emails with Errors: [InvalidEmails] (See Errorlog.csv for invalid emails)
 ```
 
 ## Invalid Email Syntax
