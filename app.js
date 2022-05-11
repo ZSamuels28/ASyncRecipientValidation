@@ -115,7 +115,7 @@ if (
   myArgs[2] == "-o" &&
   myArgs[3] != null
 ) {
-  if (extname(myArgs[1]) == ".csv" && extname(myArgs[3]) == ".csv") {
+  if (extname(myArgs[1]).toLowerCase() == ".csv" && extname(myArgs[3]).toLowerCase() == ".csv") {
     fs.createReadStream(myArgs[1])
       .pipe(csv.parse({ headers: false }))
       .on("data", (row) => {
@@ -130,7 +130,7 @@ if (
       .on("end", () => {
         console.log(
           GoodEmailCount +
-            " Valid Emails to Validate\n" +
+            " Valid Emails\n" +
             BadEmailCount +
             " Invalid Emails\n...Validating...\n"
         );
