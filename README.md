@@ -91,12 +91,12 @@ If there are invalid emails found, the following will be shown:
 ```
 Email validation completed with the following results:
 Emails Successfully Validated: [CompletedCalls]
-Emails with Errors: [InvalidEmails] (See Errorlog.csv for invalid emails)
+Emails with Errors: [InvalidEmails] (See logs/errors.csv for invalid emails)
 ```
 
 ## Invalid Email Syntax
 
-The email syntax check uses regular expressions to ensure emails are in the valid format. Any invalid emails are then exported to the ErrorLog.csv file.
+The email syntax check uses regular expressions to ensure emails are in the valid format. Any invalid emails are then exported to the logs/errors.csv file.
 
 ## See Also
 [SparkPost Developer Hub](https://developers.sparkpost.com/)

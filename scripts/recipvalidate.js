@@ -84,7 +84,7 @@ async function getRecipientValidation(
             GoodEmailCount +
             "\n\x1b[31mEmails with Errors: " +
             BadEmailCount +
-            " (See Errorlog.csv for invalid emails)"
+            " (See logs/errors.csv for invalid emails)"
         );
         errorWriter.writeRecords(BadEmailList);
       }
