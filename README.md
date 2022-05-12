@@ -21,7 +21,7 @@ You can now type `node ./app.js -h` and see usage info.
 
 ## Pre-requisites
 
-Set the following environment variables by creating a .env file within the ASyncRecipientValidation directory with the following information. Note these are case-sensitive:
+Set the following environment variables by creating a .env file within the ASyncRecipientValidation/config directory with the following information. Note these are case-sensitive:
 
 ```
 SPARKPOST_HOST
