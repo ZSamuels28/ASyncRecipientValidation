@@ -1,0 +1,4 @@
+# .env
+# To use, rename this file to variables.env
+SPARKPOST_API_KEY=[YOUR_API_KEY_HERE] #Make sure to replace with your API Key
+SPARKPOST_HOST=https://api.sparkpost.com
