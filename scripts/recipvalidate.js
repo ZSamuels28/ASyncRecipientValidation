@@ -1,6 +1,5 @@
 const axios = require("axios");
-const axiosRetry = require("axios-retry");
-const csv = require("fast-csv");
+//const axios = require("./axios-instance-config");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const dotenv = require("dotenv");
 const path = require("path");
@@ -34,17 +33,6 @@ async function getRecipientValidation(
   BadEmailCount,
   GoodEmailCount
 ) {
-  axiosRetry(axios, {
-    retries: 3, // number of retries
-    retryDelay: (retryCount) => {
-      console.log(`retry attempt: ${retryCount}`);
-      return retryCount * 20000; // time interval between retries
-    },
-    retryCondition: (error) => {
-      // if retry condition is not specified, by default idempotent requests are retried
-      return error.response.status === 503;
-    },
-  });
 
   const { window } = new JSDOM();
   const start = window.performance.now();
@@ -60,7 +48,7 @@ async function getRecipientValidation(
         },
       }).catch((error) => {
         console.log(`Error ${error.response.status} - ${error}`);
-      });
+      })
 
       completed++;
       process.stdout.write(
