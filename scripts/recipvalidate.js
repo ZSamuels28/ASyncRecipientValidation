@@ -4,7 +4,7 @@ const csv = require("fast-csv");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const dotenv = require("dotenv");
 const path = require('path')
-dotenv.config({ path: path.resolve(__dirname, '../config/.env') });
+dotenv.config({ path: path.resolve(__dirname, '../config/variables.env') });
 const myArgs = process.argv.slice(2);
 const SPARKPOST_API_KEY = process.env.SPARKPOST_API_KEY;
 const SPARKPOST_HOST = process.env.SPARKPOST_HOST;

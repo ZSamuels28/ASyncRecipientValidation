@@ -21,7 +21,7 @@ You can now type `node ./app.js -h` and see usage info.
 
 ## Pre-requisites
 
-Set the following environment variables by creating a .env file within the ASyncRecipientValidation/config directory with the following information. Note these are case-sensitive:
+Set the following environment variables by creating a variables.env file within the ASyncRecipientValidation/config directory with the following information. Note these are case-sensitive:
 
 ```
 SPARKPOST_HOST
@@ -31,7 +31,7 @@ SPARKPOST_API_KEY
     API key on your SparkPost account, with Recipient Validation rights.
 ```
 
-The .env file should look something like the following:
+The variables.env file should look something like the following:
 ```
 # .env
 SPARKPOST_API_KEY=1234567890ABCDEFGHIJKLMNOPQRSTUVXYZ
